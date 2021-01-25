@@ -1,0 +1,29 @@
+# Dependencies           
+import RPi.GPIO as GPIO
+import time
+from sense_hat import SenseHat
+sense = SenseHat()
+sense.set_rotation(90)
+# Pin Definitons 
+butPinA = 27 # These are all pull-up               
+butPinB = 17
+butPinP = 22
+
+# Pin Setup 
+GPIO.setmode(GPIO.BCM) # Broadcom pin-numbering scheme
+GPIO.setup(butPinA, GPIO.IN) # Button pin set as input w/ pull-up
+GPIO.setup(butPinB, GPIO.IN)
+GPIO.setup(butPinP, GPIO.IN)
+
+print("Press CTRL+C to exit")
+try:
+    while 1:
+        if GPIO.input(butPinA) == 0: # button is released
+            sense.load_image("mehatronika.png")
+        if GPIO.input(butPinB) == 0:
+            sense.show_letter("B",[0, 255, 0],[255, 255, 255])
+        if GPIO.input(butPinP) == 0: # button is released
+            sense.show_letter("P",[0, 0, 255],[255, 255, 255])
+
+except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
+    GPIO.cleanup() # cleanup all GPIO
